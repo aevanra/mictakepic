@@ -17,9 +17,8 @@ func main() {
 
     // Load HTML and Static files
     r.LoadHTMLGlob("./assets/*")
+    r.Static("/Shares", "./Shares")
     r.Static("/static", "./static")
-    r.StaticFile("/favicon.ico", "./favicon.ico")
-
 
     // Routes
     
@@ -41,7 +40,7 @@ func main() {
     r.POST("/createUser", auth.CreateNewUser)
     r.GET("/listFiles", smb.LoadImageGETHandler)
 
-    err = r.Run(":82") // listen and serve on
+    err = r.Run(":8082") // listen and serve on
     if err != nil {
         log.Fatal(err)
     }

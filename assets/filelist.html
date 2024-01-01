@@ -9,11 +9,13 @@
 </head>
 
 <body>
-    {{if .username}}
-        <h2 class="centered">{{.username}} has logged in</h2>
-    {{end}}
-
-    {{.file_list}}
+    {{ if .images }}
+        <div class="image-grid">
+        {{ range .images }}
+                <img src="/Shares/{{.}}" alt="image">
+        {{ end }}
+        </div>
+    {{ end }}
 
 </body>
 
