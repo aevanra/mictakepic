@@ -5,6 +5,7 @@ type User struct {
     Username  string
     PassHash  string
     DataShare string
+    Admin bool
 }
 
 type DataShare struct {

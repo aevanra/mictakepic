@@ -45,23 +45,23 @@ func getUserByUsername(username string) (obj.User, error) {
 
 
 func LoginPOSTHandler(c *gin.Context) {
-    
+    var message gin.H 
     username, pass := c.PostForm("username"), c.PostForm("password")
 
     if username == "" ||  pass == "" {
-        c.HTML(http.StatusUnauthorized, "index.html", gin.H{"message": "Please enter a Username and Password"})
+        c.HTML(http.StatusUnauthorized, "login.html", gin.H{"message": "Please enter a Username and Password"})
         return
     }
 
     foundUser, err := getUserByUsername(username)
     if err != nil{
-        c.HTML(http.StatusUnauthorized, "index.html", gin.H{"message": "Invalid Username and/or Password"})
+        c.HTML(http.StatusUnauthorized, "login.html", gin.H{"message": "Invalid Username and/or Password"})
         return
     }
 
     err = bcrypt.CompareHashAndPassword([]byte(foundUser.PassHash), []byte(pass))
     if err != nil {
-        c.HTML(http.StatusUnauthorized, "index.html", gin.H{"message": "Invalid Username and/or Password"})
+        c.HTML(http.StatusUnauthorized, "login.html", gin.H{"message": "Invalid Username and/or Password"})
         return
     }
     
@@ -70,5 +70,27 @@ func LoginPOSTHandler(c *gin.Context) {
         panic(err)
     }
 
-    c.HTML(http.StatusOK, "userpage.html", gin.H{"username": foundUser.Username})
+    if foundUser.Admin {
+        message = gin.H{"username": foundUser.Username, "adminStatus": foundUser.Admin}
+    } else {
+        message = gin.H{"username": foundUser.Username}
+    }
+
+    c.HTML(http.StatusOK, "userpage.html", message)
 }
+
+func UserHomeHandler(c *gin.Context) {
+    var message gin.H 
+    val := session.GetSessionValue(c.Request, "User")
+    foundUser := val.(*obj.User)
+    
+
+    if foundUser.Admin {
+        message = gin.H{"username": foundUser.Username, "adminStatus": foundUser.Admin}
+    } else {
+        message = gin.H{"username": foundUser.Username}
+    }
+
+    c.HTML(http.StatusOK, "userpage.html", message)
+}
+

@@ -19,11 +19,13 @@
             <input type="password" id="password" name="password"><br>
             <label for="datashare"> Default Datashare: </label>
             <input type="text" id="datashare" name="datashare"><br>
+            <label for="admin"> Admin? </label>
+            <input type="checkbox" id="admin" name="isAdmin"><br>
             <input type="submit" value="Submit">
         </form>
         
-        <form action="/" >
-            <input type="submit" value="Back To Login">
+        <form action="/users/homepage" >
+            <input type="submit" value="Back To Homepage">
         </form>
 
         {{if .message}}

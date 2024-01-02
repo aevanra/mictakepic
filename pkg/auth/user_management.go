@@ -22,6 +22,7 @@ func CreateNewUser(c *gin.Context) {
     newUsername := c.PostForm("username")
     newPassword := c.PostForm("password")
     newDatashare := c.PostForm("datashare")
+    isAdmin := c.PostForm("isAdmin")
 
     if !smb.ValidateUserDatashare(obj.User{DataShare: newDatashare}) {
         c.HTML(http.StatusBadRequest, "createUser.html", 
@@ -35,7 +36,7 @@ func CreateNewUser(c *gin.Context) {
         return
     }
 
-    err := addUser(newUsername, newPassword, newDatashare)
+    err := addUser(newUsername, newPassword, newDatashare, isAdmin)
     if err != nil {
         c.HTML(http.StatusNotFound, "createUser.html", 
         gin.H{"message": "Something went wrong -- user was not created or updated"})
@@ -46,13 +47,17 @@ func CreateNewUser(c *gin.Context) {
 
 }
 
-func addUser(username string, password string, datashare string) (err error) {
+func addUser(username string, password string, datashare string, isAdmin string) (err error) {
     //Load env file
     err = godotenv.Load()
     if err != nil {
         return err
     }
-
+    
+    admin := false  
+    if isAdmin == "on" {
+        admin = true
+    }
 
     // Creating Mongo Connection
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -78,6 +83,7 @@ func addUser(username string, password string, datashare string) (err error) {
         {Key: "Username", Value: username}, 
         {Key: "PassHash", Value: hash},
         {Key: "DataShare", Value: datashare},
+        {Key: "Admin", Value: admin},
     }}}
     opts := options.Update().SetUpsert(true)
 

@@ -14,10 +14,16 @@
     {{end}}
 
 
-    <form action="/listFiles" method="GET">
-        <input type="submit" value="List Files">
+    <form action="/users/getImages" method="GET">
+        <input type="submit" value="Show Images">
     </form>
 
+    {{ if .adminStatus }}
+        <form action="/users/createUser" method="GET">
+            <input type="submit" value="Create New User">
+        </form>
+    {{ end }}
+    
 </body>
 
 </html>
