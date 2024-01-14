@@ -62,6 +62,6 @@ func LoadImageGETHandler(c *gin.Context) {
     }
     filesList := ListImagesFromShare(share)
 
-    c.HTML(http.StatusOK, "filelist.html", gin.H{"images": filesList})
+    c.HTML(http.StatusOK, "filelist.html", gin.H{"images": filesList, "share": share})
 
 }

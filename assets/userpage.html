@@ -16,7 +16,8 @@
 
     {{ if .Shares }}
         {{ range .Shares }}
-            <form action="/users/getImages?share={{.}}" method="GET">
+            <form action="/users/getImages" method="GET">
+                <input type="hidden" name="share" value="{{.}}">
                 <input type="submit" value="List Images on {{.}} Share">
             </form>
         {{ end }}

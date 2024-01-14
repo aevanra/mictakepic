@@ -9,10 +9,12 @@
 </head>
 
 <body>
+    <h1 class="centered"> {{ .share }} </h1>
+
     {{ if .images }}
         <div class="image-grid">
         {{ range .images }}
-                <img src="/Shares/{{.}}">
+            <img src="/Shares/{{$.share}}/{{.}}" class="image-grid-item">
         {{ end }}
         </div>
     {{ end }}

@@ -32,7 +32,7 @@ func ConfirmShareAccess() gin.HandlerFunc {
         }
         foundUser := val.(*obj.User)
 
-        if !slices.Contains(foundUser.AllDatashares, c.Query("datashare")) {
+        if !slices.Contains(foundUser.AllDatashares, c.Query("share")) {
             c.Status(401)
             c.Abort()
         }
