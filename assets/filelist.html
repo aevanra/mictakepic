@@ -14,9 +14,12 @@
     {{ if .images }}
         <div class="image-grid">
         {{ range .images }}
-            <img src="/Shares/{{$.share}}/{{.}}" class="image-grid-item">
+        <a href="/Shares/{{$.share}}/{{.}}" download="{{.}}" title="Click to Download {{.}}">
+                <img src="/Shares/{{$.share}}/{{.}}" title="Click to Download {{.}}">
+            </a>
         {{ end }}
         </div>
+
     {{ end }}
 
 </body>

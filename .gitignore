@@ -21,3 +21,6 @@
 go.work
 
 .env
+
+# Testing shares folder -- should be added in Docker containter
+Shares

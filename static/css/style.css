@@ -36,6 +36,12 @@
     object-fit: contain;
 }
 
+.image-grid > a {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
 @media (max-width: 1024px) {
     .image-grid {
         --num-cols: 2;

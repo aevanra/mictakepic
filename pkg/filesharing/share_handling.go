@@ -2,6 +2,7 @@ package filesharing
 
 import (
     "os"
+    "path/filepath"
     "slices"
     "net/http"
 
@@ -42,11 +43,14 @@ func ValidateUserDatashare(user obj.User) bool {
 }
 
 func ListImagesFromShare(share string) []string {
+    VALID_FILETYPES := []string{".jpg", ".jpeg", ".png", ".gif"}
     images, _ := os.ReadDir("./Shares/" + share)
     names := make([]string, 0)
 
     for _, image := range(images) {
-        names = append(names, image.Name())
+        if !image.IsDir() && slices.Contains(VALID_FILETYPES, filepath.Ext(image.Name())) {
+           names = append(names, image.Name())
+        }
     }
 
     return names
