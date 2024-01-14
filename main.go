@@ -39,10 +39,6 @@ func main() {
         c.HTML(http.StatusOK, "login.html", gin.H{})
     })
     r.POST("/auth", auth.LoginPOSTHandler)
-    r.GET("/createUser", func(c *gin.Context) {
-        c.HTML(http.StatusOK, "createUser.html", gin.H{"Shares": filesharing.ListDataShareNames() })
-    })
-    r.POST("/createUser", auth.CreateNewUser)
 
     // Auth-Handling Routes
     users := r.Group("/users", middleware.RequireAuth())
