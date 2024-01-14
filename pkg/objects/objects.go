@@ -4,7 +4,8 @@ type User struct {
     ID        string
     Username  string
     PassHash  string
-    DataShare string
+    DefaultDataShare string
+    AllDatashares []string
     Admin bool
 }
 

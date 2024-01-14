@@ -36,6 +36,7 @@ func getUserByUsername(username string) (obj.User, error) {
     filter := bson.D{{Key: "Username", Value: username}}
     var foundUser obj.User
     err = userCollection.FindOne(ctx, filter).Decode(&foundUser)
+
     if err != nil {
         return obj.User{}, err
     }
@@ -45,7 +46,6 @@ func getUserByUsername(username string) (obj.User, error) {
 
 
 func LoginPOSTHandler(c *gin.Context) {
-    var message gin.H 
     username, pass := c.PostForm("username"), c.PostForm("password")
 
     if username == "" ||  pass == "" {
@@ -54,6 +54,8 @@ func LoginPOSTHandler(c *gin.Context) {
     }
 
     foundUser, err := getUserByUsername(username)
+    message := gin.H{"username": foundUser.Username, "adminStatus": foundUser.Admin, "Shares": foundUser.AllDatashares}
+    
     if err != nil{
         c.HTML(http.StatusUnauthorized, "login.html", gin.H{"message": "Invalid Username and/or Password"})
         return
@@ -70,26 +72,17 @@ func LoginPOSTHandler(c *gin.Context) {
         panic(err)
     }
 
-    if foundUser.Admin {
-        message = gin.H{"username": foundUser.Username, "adminStatus": foundUser.Admin}
-    } else {
-        message = gin.H{"username": foundUser.Username}
-    }
-
     c.HTML(http.StatusOK, "userpage.html", message)
 }
 
 func UserHomeHandler(c *gin.Context) {
-    var message gin.H 
     val := session.GetSessionValue(c.Request, "User")
     foundUser := val.(*obj.User)
+    message := gin.H{"username": foundUser.Username, "Shares": foundUser.AllDatashares}
     
-
     if foundUser.Admin {
-        message = gin.H{"username": foundUser.Username, "adminStatus": foundUser.Admin}
-    } else {
-        message = gin.H{"username": foundUser.Username}
-    }
+        message["adminStatus"] = foundUser.Admin
+    } 
 
     c.HTML(http.StatusOK, "userpage.html", message)
 }

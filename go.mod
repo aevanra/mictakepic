@@ -9,7 +9,6 @@ require (
 	github.com/gorilla/sessions v1.2.2
 	github.com/hirochachacha/go-smb2 v1.1.0
 	github.com/joho/godotenv v1.5.1
-	github.com/wagslane/go-password-validator v0.3.0
 	go.mongodb.org/mongo-driver v1.13.1
 	golang.org/x/crypto v0.17.0
 )

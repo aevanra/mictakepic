@@ -12,20 +12,25 @@
     <div class="centered">
         <h2> New User Information </h2>
 
-        <form action="/createUser" method="POST">
+        <form action="/users/createUser" method="POST">
             <label for="username">Username: </label>
             <input type="text" id="username" name="username"><br>
             <label for="password"> Password: </label>
             <input type="password" id="password" name="password"><br>
             <label for="datashare"> Default Datashare: </label>
             <input type="text" id="datashare" name="datashare"><br>
+            <label for="listShares"> Shares to give Perms to: </label><br>
+            {{ range .Shares }}
+                <label for="{{.}}"> {{ . }} </label>
+                <input type="checkbox" id="{{.}}" name="access{{.}}">
+            {{ end }}<br>
             <label for="admin"> Admin? </label>
             <input type="checkbox" id="admin" name="isAdmin"><br>
             <input type="submit" value="Submit">
         </form>
         
         <form action="/users/homepage" >
-            <input type="submit" value="Back To Homepage">
+            <input type="submit" value="Back To Login">
         </form>
 
         {{if .message}}

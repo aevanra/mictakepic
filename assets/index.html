@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>mictakepic Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div>
+        <form action="/login" method="GET">
+            <input type="submit" name="Login" value="Login">
+        </form>
+
+        {{ if .images }}
+            <div class="image-grid">
+            {{ range .images }}            
+                <img src="/Shares/{{.}}">
+            {{ end }}
+            </div>
+        {{ end }}
+        
+    </div>
+</body>

@@ -14,9 +14,13 @@
     {{end}}
 
 
-    <form action="/users/getImages" method="GET">
-        <input type="submit" value="Show Images">
-    </form>
+    {{ if .Shares }}
+        {{ range .Shares }}
+            <form action="/users/getImages$share={{.}}" method="GET">
+                <input type="submit" value="List Images on {{.}} Share">
+            </form>
+        {{ end }}
+    {{ end }}
 
     {{ if .adminStatus }}
         <form action="/users/createUser" method="GET">

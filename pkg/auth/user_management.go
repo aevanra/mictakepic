@@ -23,31 +23,40 @@ func CreateNewUser(c *gin.Context) {
     newPassword := c.PostForm("password")
     newDatashare := c.PostForm("datashare")
     isAdmin := c.PostForm("isAdmin")
+    
+    availableShares := filesharing.ListDataShareNames()
+    accessShares := make([]string, 0)
+    for _, share := range availableShares {
+        access := c.PostForm("access" + share)
+        if access == "on" {
+            accessShares = append(accessShares,  share)
+        }
+    }
 
-    if !smb.ValidateUserDatashare(obj.User{DataShare: newDatashare}) {
+    if !filesharing.ValidateUserDatashare(obj.User{DefaultDataShare: newDatashare}) {
         c.HTML(http.StatusBadRequest, "createUser.html", 
-        gin.H{"message": "Provided DataShare does not exist."})
+        gin.H{"message": "Provided DataShare does not exist.", "Shares": availableShares})
         return
     }
     
     if newUsername == "" || newPassword == "" || newDatashare == "" {
         c.HTML(http.StatusBadRequest, "createUser.html", 
-        gin.H{"message": "New Users must have a username, a password, and a default datashare"})
+        gin.H{"message": "New Users must have a username, a password, and a default datashare", "Shares": availableShares})
         return
     }
 
-    err := addUser(newUsername, newPassword, newDatashare, isAdmin)
+    err := addUser(newUsername, newPassword, newDatashare, accessShares, isAdmin)
     if err != nil {
         c.HTML(http.StatusNotFound, "createUser.html", 
-        gin.H{"message": "Something went wrong -- user was not created or updated"})
+        gin.H{"message": "Something went wrong -- user was not created or updated", "Shares": availableShares})
         return
     }
 
-    c.HTML(http.StatusOK, "createUser.html", gin.H{"message": "New user " + newUsername + " has been created or updated"})
+    c.HTML(http.StatusOK, "createUser.html", gin.H{"message": "New user " + newUsername + " has been created or updated", "Shares": availableShares})
 
 }
 
-func addUser(username string, password string, datashare string, isAdmin string) (err error) {
+func addUser(username string, password string, datashare string, accessShares []string, isAdmin string) (err error) {
     //Load env file
     err = godotenv.Load()
     if err != nil {
@@ -82,7 +91,8 @@ func addUser(username string, password string, datashare string, isAdmin string)
         {Key: "ID", Value: uuid.New()}, 
         {Key: "Username", Value: username}, 
         {Key: "PassHash", Value: hash},
-        {Key: "DataShare", Value: datashare},
+        {Key: "DefaultDataShare", Value: datashare},
+        {Key: "AllDataShares", Value: accessShares},
         {Key: "Admin", Value: admin},
     }}}
     opts := options.Update().SetUpsert(true)
