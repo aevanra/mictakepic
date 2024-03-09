@@ -1,0 +1,16 @@
+---
+interface Props {
+        filename: string;
+    }
+
+const { filename }: Props = Astro.props;
+---
+
+<Image src="/Shares/micportfolio/{filename}" />
+
+<stlye>
+    img {
+            width: 100%;
+            height: 100%
+            object-fit: contain;
+        }   

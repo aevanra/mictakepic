@@ -33,6 +33,10 @@ func main() {
         c.HTML(http.StatusOK, "index.html",
         gin.H{"images": homeImages})
     })
+    r.GET("/listHomeImages", func(c *gin.Context) {
+        homeImages := filesharing.ListImagesFromShare(os.Getenv("HOME_IMAGES_DIR_NAME"))
+        c.JSON(http.StatusOK, homeImages)
+    })
     
     //Login page
     r.GET("/login", func(c *gin.Context) {
