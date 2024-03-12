@@ -18,14 +18,14 @@
         {{ range .Shares }}
             <form action="/users/getImages" method="GET">
                 <input type="hidden" name="share" value="{{.}}">
-                <input type="submit" value="List Images on {{.}} Share">
+                <input type="submit" value="List Images on {{.}} Share" class="button">
             </form>
         {{ end }}
     {{ end }}
 
     {{ if .adminStatus }}
         <form action="/users/createUser" method="GET">
-            <input type="submit" value="Create New User">
+            <input type="submit" value="Create New User" class="button">
         </form>
     {{ end }}
     

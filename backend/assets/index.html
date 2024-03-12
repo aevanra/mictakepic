@@ -9,11 +9,14 @@
 </head>
 
 <body>
-    <div>
+    <div class="login-button">
         <form action="/login" method="GET">
-            <input type="submit" name="Login" value="Login">
+            <input type="submit" name="Login" value="User Login" class="button">
         </form>
+    </div>
+    
 
+    <div>
         {{ if .images }}
             <div class="image-grid">
             {{ range .images }}            
@@ -22,5 +25,19 @@
             </div>
         {{ end }}
         
+    </div>
+
+    <div class="centered">
+        <div class="socials">
+            <a href="https://www.instagram.com/mictakepic/" target="">
+                <img src="/static/instagram_icon.png" alt="Instagram" class="social-icon">
+            </a>
+            <a href="https://www.youtube.com/@MicArmus" target="">
+                <img src="/static/youtube_icon.png" alt="Youtube" class="social-icon">
+            </a>
+            <a href="https://www.tiktok.com/@miclarinet?lang=en" target="">
+                <img src="/static/tiktok_icon.png" alt="Tiktok" class="social-icon">
+            </a>
+        </div>
     </div>
 </body>

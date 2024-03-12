@@ -5,9 +5,11 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Noto Sans', sans-serif;
-    background-color: #acbda1;
+    --main-color: #acbda1;
+    --secondary-color: #95a48b;
+    --text-input-color: #f5f5f5;
+    background-color: var(--main-color);
 }
-
 
 .centered {
     display: flex;
@@ -16,6 +18,52 @@
     align-items: center;
 }
 
+.right-aligned {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+
+/* Handle Input Types */
+input[type="submit"] {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="text"] {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: var(--text-input-color);
+}
+
+input[type="password"] {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: var(--text-input-color);
+}
+
+/* Socials Icons */
+.social-icon {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+}
+
+
+
+/* Image Grid Definitions */
 .image-grid {
     --gap: 4px;
     --num-cols: 4;

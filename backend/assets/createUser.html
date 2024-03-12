@@ -26,11 +26,11 @@
             {{ end }}<br>
             <label for="admin"> Admin? </label>
             <input type="checkbox" id="admin" name="isAdmin"><br>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Submit" class="button">
         </form>
         
-        <form action="/users/homepage" >
-            <input type="submit" value="Back To Login">
+        <form action="/users/homepage">
+            <input type="submit" value="Back To Login" class="button">
         </form>
 
         {{if .message}}

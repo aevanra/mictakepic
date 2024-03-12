@@ -1,14 +1,18 @@
 package filesharing
 
 import (
-    "os"
-    "path/filepath"
-    "slices"
-    "net/http"
+	"image"
+	_ "image/png"
+    _ "image/jpeg"
+	"net/http"
+	"os"
+	"path/filepath"
+	"slices"
+	"sync"
 
-    "github.com/gin-gonic/gin"
-    "github.com/aevanra/mictakepic/pkg/session"
-    "github.com/aevanra/mictakepic/pkg/objects"
+	"github.com/aevanra/mictakepic/pkg/objects"
+	"github.com/aevanra/mictakepic/pkg/session"
+	"github.com/gin-gonic/gin"
 )
 
 
@@ -54,6 +58,32 @@ func ListImagesFromShare(share string) []string {
     }
 
     return names
+}
+
+func GetImageDimensions(filename string, share string, ch chan obj.Image, wg *sync.WaitGroup) {
+    file, err := os.Open("./Shares/" + share + "/" + filename)
+
+    if err != nil {
+        wg.Done()
+        return
+    }
+
+    defer file.Close()
+
+    image, _, err := image.DecodeConfig(file)
+
+    if err != nil {
+        wg.Done()
+        return
+    }
+
+    ch <- obj.Image{
+        Filename: filename,
+        Height: image.Height,
+        Width: image.Width,
+    }
+
+    wg.Done()
 }
 
 func LoadImageGETHandler(c *gin.Context) {
