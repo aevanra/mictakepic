@@ -60,7 +60,7 @@ func ListImagesFromShare(share string) []string {
     return names
 }
 
-func GetImageDimensions(filename string, share string, ch chan obj.Image, wg *sync.WaitGroup) {
+func getImageDimensions(filename string, share string, ch chan obj.Image, wg *sync.WaitGroup) {
     file, err := os.Open("./Shares/" + share + "/" + filename)
 
     if err != nil {
@@ -84,6 +84,40 @@ func GetImageDimensions(filename string, share string, ch chan obj.Image, wg *sy
     }
 
     wg.Done()
+}
+
+func GetMetadataFromImageList(images []string, share string, sorted bool) obj.ImageList {
+        //Make list to hold Image Objects
+        returnImages := make([]obj.Image, 0, len(images))
+
+        //Make Channel to get metadata concurrently
+        imageCH := make(chan obj.Image, len(images)+1)
+
+        //Make WaitGroup to force all images to finish
+        wg := sync.WaitGroup{}
+
+        for _, imageName := range(images) {
+            // Add count of concurrent to wait for
+            wg.Add(1)
+
+            go getImageDimensions(imageName, share, imageCH, &wg)
+        }
+
+        //Wait for channel and close
+        wg.Wait()
+        close(imageCH)
+
+        for image := range(imageCH) {
+            returnImages = append(returnImages, image)
+        }
+
+        imageList := obj.ImageList{Images: returnImages}
+
+        if sorted {
+            return imageList.Sort()
+        } else {
+            return imageList
+        }
 }
 
 func LoadImageGETHandler(c *gin.Context) {
