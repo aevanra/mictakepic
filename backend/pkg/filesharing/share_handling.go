@@ -79,6 +79,7 @@ func getImageDimensions(filename string, share string, ch chan obj.Image, wg *sy
 
     ch <- obj.Image{
         Filename: filename,
+        DataShare: share,
         Height: image.Height,
         Width: image.Width,
     }

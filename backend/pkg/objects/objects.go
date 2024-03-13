@@ -19,6 +19,7 @@ type DataShare struct {
 
 type Image struct {
     Filename    string
+    DataShare   string
     Height      int
     Width       int
 }

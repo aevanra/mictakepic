@@ -1,21 +1,13 @@
 import Socials from "@/components/socials"
 import Button from "@/components/button"
-import Image from "next/image"
+import Gallery from "@/components/gallery"
+import Img from "@/types/Image"
 
-interface Image {
-        Filename: string;
-        Height: number;
-        Width: number;
-    } 
 
-async function getHomeImages(): Promise<Image[]> {
+async function getHomeImages(): Promise<Img[]> {
         const res = await fetch('http://localhost:8082/listHomeImages');
         const data = await res.json();
         return data?.Images;
-    }
-
-function buildImageSrc(image: string): string {
-        return "/Shares/micportfolio/" + image
     }
 
 export default async function Home(): Promise<JSX.Element> {
@@ -27,18 +19,7 @@ export default async function Home(): Promise<JSX.Element> {
                 <Button link="/login" text="User Login"/>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                
-                {imageList.map((image: Image) => (
-                    <Image key={image.Filename} 
-                        className="h-auto w-full relative rounded-lg" 
-                        src={buildImageSrc(image.Filename)}
-                        height={image.Height}
-                        width={image.Width}
-                        alt={buildImageSrc(image.Filename)}
-                    />
-                    ))}
-            </div>
+            <Gallery Imgs={imageList} />
 
             <Socials/>
 
