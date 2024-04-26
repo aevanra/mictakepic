@@ -1,19 +1,21 @@
 package auth
 
 import (
-    "context"
-    "net/http"
-    "os"
-    "time"
+	"context"
+    "io"
+    "encoding/json"
+	"net/http"
+	"os"
+	"time"
 
-    "github.com/aevanra/mictakepic/pkg/objects"
-    "github.com/aevanra/mictakepic/pkg/session"
-    "github.com/gin-gonic/gin"
-    "github.com/joho/godotenv"
-    "golang.org/x/crypto/bcrypt"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/aevanra/mictakepic/pkg/objects"
+	"github.com/aevanra/mictakepic/pkg/session"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/crypto/bcrypt"
 )
 
 
@@ -46,24 +48,33 @@ func getUserByUsername(username string) (obj.User, error) {
 
 
 func LoginPOSTHandler(c *gin.Context) {
-    username, pass := c.PostForm("username"), c.PostForm("password")
+    // Get the username and password from the request body
+    postBodyBytes, err := io.ReadAll(c.Request.Body)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"message": "Error reading request body"})
+    }
+
+    postBody := make(map[string]interface{})
+    json.Unmarshal(postBodyBytes, &postBody)
+
+    username := postBody["username"].(string)
+    pass := postBody["password"].(string)
 
     if username == "" ||  pass == "" {
-        c.HTML(http.StatusUnauthorized, "login.html", gin.H{"message": "Please enter a Username and Password"})
+        c.JSON(http.StatusUnauthorized, gin.H{"message": "Please enter a Username and Password"})
         return
     }
 
     foundUser, err := getUserByUsername(username)
-    message := gin.H{"username": foundUser.Username, "adminStatus": foundUser.Admin, "Shares": foundUser.AllDatashares}
     
     if err != nil{
-        c.HTML(http.StatusUnauthorized, "login.html", gin.H{"message": "Invalid Username and/or Password"})
+        c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid Username and/or Password"})
         return
     }
 
     err = bcrypt.CompareHashAndPassword([]byte(foundUser.PassHash), []byte(pass))
     if err != nil {
-        c.HTML(http.StatusUnauthorized, "login.html", gin.H{"message": "Invalid Username and/or Password"})
+        c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid Username and/or Password"})
         return
     }
     
@@ -72,7 +83,8 @@ func LoginPOSTHandler(c *gin.Context) {
         panic(err)
     }
 
-    c.HTML(http.StatusOK, "userpage.html", message)
+    c.Header("Access-Control-Allow-Origin", "*")
+    c.JSON(http.StatusOK, foundUser)
 }
 
 func UserHomeHandler(c *gin.Context) {
