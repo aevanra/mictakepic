@@ -17,7 +17,7 @@ export default function ImageContainer({image}: Props) {
 
     return (
 
-    <div className="w-[450px] justify-self-center" style= {{ gridRow: `span ${photoSpans}` }}>
+    <div className="justify-self-center" style= {{ gridRow: `span ${photoSpans}` }}>
         <div className="rounded-xl overflow-hidden m-1 place-content-center group">
             <Image
                 src={buildImageSrc(image)}

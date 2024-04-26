@@ -2,6 +2,7 @@ import Socials from "@/components/socials"
 import Button from "@/components/button"
 import Gallery from "@/components/gallery"
 import Img from "@/types/Image"
+import Link from "next/link";
 
 
 async function getHomeImages(): Promise<Img[]> {
@@ -16,7 +17,9 @@ export default async function Home(): Promise<JSX.Element> {
     return (
         <div>
             <div className="text-end">
-                <Button link="/login" text="User Login"/>
+                <Link href="/login">
+                    <Button text="User Login"/>
+                </Link>
             </div>
 
             <Gallery Imgs={imageList} />

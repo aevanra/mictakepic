@@ -15,7 +15,7 @@ export default function Gallery({Imgs}:Props): JSX.Element {
 
     return (
         <>
-            <section className="px-1 my-3 grid grid-cols-4 auto-rows">
+            <section className="px-1 my-3 grid md:grid-cols-4 auto-rows">
                 {Imgs.map(Img => (
                         <ImgContainer image={Img} key={Img.Filename} />
                     )
