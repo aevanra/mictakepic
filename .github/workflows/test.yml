@@ -1,0 +1,14 @@
+name: test multiple triggers
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  echo_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo message
+        run: echo "Hello, world!"
